@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: hollow-curl
+  name: covid19
 spec:
   schedule: "0 * * * *"
   jobTemplate:
@@ -10,5 +10,5 @@ spec:
         spec:
           containers:
           - name: covid
-            image: eshanks16/covid:v1
+            image: eshanks16/covid:v2
           restartPolicy: OnFailure

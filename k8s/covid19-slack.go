@@ -56,6 +56,7 @@ func postToSlack(webhookURL string, msg string) error {
 }
 
 func main() {
+
 	//set slack webhook URL
 	webhookUrl := "NEEDS_TO_BE_FILLED_IN"
 
@@ -67,22 +68,50 @@ func main() {
     globalEndpoint := "https://corona.lmao.ninja/all"
     worldInfections := getInfections(globalEndpoint)
 
-    //Get US Infections
-    usEndpoint := "https://corona.lmao.ninja/countries/usa"
-    usInfections := getInfections(usEndpoint)
-
-	//Post to Slack - World
-	err := postToSlack(webhookUrl, worldInfections)
-	//Post to Slack - USA
-	err = postToSlack(webhookUrl, usInfections)
+	var data map[string]interface{}
+	err := json.Unmarshal([]byte(worldInfections), &data)
 	if err != nil {
 		log.Fatal(err)
 	}
+	//for debugging
+	//fmt.Println("These are the current COVID-19 numbers as of", today)
+	//fmt.Println("World Cases :", data["cases"])
+	//fmt.Println("World Deaths :", data["deaths"])
+	//fmt.Println("World Recovered :", data["recovered"])
+	//fmt.Println("Updated: ", data["updated"])
+	
+    usEndpoint := "https://corona.lmao.ninja/countries/usa"
+    usInfections := getInfections(usEndpoint)
 
-    fmt.Println("These are the current COVID-19 numbers as of", today)
-    fmt.Println("World Infections -----" )
-    fmt.Println(worldInfections)
-    fmt.Println("US Infections -----")
-    fmt.Println(usInfections)
+	var usData map[string]interface{}
+	userr := json.Unmarshal([]byte(usInfections), &usData)
+	if userr != nil {
+		log.Fatal(userr)
+	}
 
+	//For Debugging
+	//fmt.Println("US cases :", usData["cases"])
+	//fmt.Println("US cases today:", usData["todayCases"])
+	//fmt.Println("US deaths :", usData["deaths"])
+	//fmt.Println("US deaths today:", usData["todayDeaths"])
+	//fmt.Println("US recovered :", usData["recovered"])
+
+
+	//Post to Slack - World
+	err = postToSlack(webhookUrl, "These are the current COVID-19 numbers as of " + today + "\n" +
+	"World Cases : " + fmt.Sprintf("%v", data["cases"]) + "\n" + 
+	"World Deaths : " + fmt.Sprintf("%v", data["deaths"]) + "\n" + 
+	"World Recovered : " + fmt.Sprintf("%v", data["recovered"]) + "\n" +
+	"US Cases : " + fmt.Sprintf("%v", usData["cases"]) + "\n" +
+	"US Cases today : " + fmt.Sprintf("%v", usData["todayCases"]) + "\n" +
+	"US Deaths : " + fmt.Sprintf("%v", usData["deaths"]) + "\n" +
+	"US Deaths today : " + fmt.Sprintf("%v", usData["todayDeaths"]) + "\n" +
+	"US recovered : " + fmt.Sprintf("%v", usData["recovered"]) + "\n")
+
+	//For Debugging
+    //fmt.Println("These are the current COVID-19 numbers as of", today)
+    //fmt.Println("World Infections -----" )
+    //fmt.Println(worldInfections)
+    //fmt.Println("US Infections -----")
+    //fmt.Println(usInfections)
 }

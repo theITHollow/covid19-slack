@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: covid1
+spec:
+  containers:
+  - name: covid1
+    image: docker.io/eshanks16/covid:v2
+  imagePullSecrets:
+  - name: regcred
