@@ -108,13 +108,6 @@ func HandleRequest() (string, error) {
 	"US Deaths today : " + fmt.Sprintf("%v", usData["todayDeaths"]) + "\n" +
 	"US recovered : " + fmt.Sprintf("%v", usData["recovered"]) + "\n")
 
-	//For Debugging
-    //fmt.Println("These are the current COVID-19 numbers as of", today)
-    //fmt.Println("World Infections -----" )
-    //fmt.Println(worldInfections)
-    //fmt.Println("US Infections -----")
-    //fmt.Println(usInfections)
-
 	return "Infections Printed", nil
 }
 
